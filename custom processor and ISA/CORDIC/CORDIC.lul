@@ -1,0 +1,240 @@
+//load initial cordinates result will be in 5-6 (radius) and 7-8 (angle)
+setl 0  //r0 = 0
+setu 0 
+lw  $r1 //r1 = upper byte of X
+setl 1  //r0 = 1
+lw  $r2 //r2 = lower byte of X
+setl 2  //r0 = 2
+lw  $r3 //r3 = upper byte of Y
+setl 3  //r0 = 3
+lw  $r4 //r4 = lower byte of Y
+setl 12 //r0 = 12
+mov  $r14 //r5 = 12
+setl 0 //r0 = 0
+mov  $r5 //r5 = 0, counter i
+//$r8,$r9 for angle initially 0x00
+//make a copy of temp X,Y before starting (r10-r13 are temp X and Y)
+add $r1
+mov $r10
+setl 0  //clear
+setu 0
+add $r2
+mov $r11
+setl 0  //clear
+setu 0
+add $r3
+mov $r12
+setl 0  //clear
+setu 0
+add $r4
+mov $r13
+
+START:
+clr //clear overflow
+setl 0  //clear
+setu 8
+mov $r6  //0x08 for shifting angle (upper byte)
+setu 0
+mov $r7  //0x00 for shifting angle (lower byte)
+add $r5  //load counter i to r0
+SHIFTTEMP:
+bez COUNTINUE //if i is still 0 dont shift
+srp $r6       //shift 0x8000 for angle calculation
+srg $r7			//shift 0x8000 for angle calculation
+dec $r0       //decrement r0 by 1
+bnez SHIFTTEMP //if the counter is not zero keep shifting
+
+COUNTINUE: 
+add $r12  //r0 = r0(ro 0 is 0) + r12 upper of Y
+sr  7   //r0 >> 7 (extract the sign bit of Y)
+bez YGTEZERO //if Y >= 0 branch
+//negate Y before shifting
+not $r3 
+not $r4 //take complement
+inc $r4 //get two's complement (lower Y + 1)
+setl 0  //clear
+setu 0
+add $r3 // add it to the upper Y
+clr //clear overflow
+mov $r3
+//shift X
+setl 0  //clear
+setu 0
+add $r5
+SHIFTX2:
+bez STOPSHIFTX2
+srpx $r1      //X
+srg $r2
+dec $r0       //decrement r0 by 1
+bnez SHIFTX2 //if the counter is not zero keep shifting
+STOPSHIFTX2:
+//shift Y
+setl 0  //clear
+setu 0
+add $r5
+SHIFTY:
+bez STOPSHIFTY
+srpx $r3      //Y
+srg $r4
+dec $r0       //decrement r0 by 1
+bnez SHIFTY //if the counter is not zero keep shifting
+STOPSHIFTY:
+//negate shifted angle before calculation for Y < 0 case
+not $r6 
+not $r7 //take complement
+inc $r7 //get two's complement (lower Y + 1)
+setl 0  //clear
+setu 0
+add $r6 // add it to the upper Y
+clr // clear overflow
+mov $r6
+//x = x + -y >> i
+setl 0  //clear
+setu 0
+add $r11 //r0 = lower byte of X
+add $r4  //calculate lower byte of x + -y >> i (might have carryout)
+mov $r11 //mov back to r11 lower byte(x = x + -y >> i)  
+setl 0  //clear
+setu 0
+add $r10 //r0 = upper byte of X + overflow from lower byte addition
+clr //clear overflow
+add $r3 //add the upper byte of -y >> i we have x = x + -y >> i complete
+clr //clear overflow
+mov $r10
+//y = y + x >> i
+setl 0  //clear
+setu 0
+add $r13 //r0 = lower byte of Y
+add $r2  //calculate lower byte of y + x >> i (might have carryout)
+mov $r13 //mov back to r11 lower byte(y = y + x >> i)  
+setl 0  //clear
+setu 0
+add $r12 //r0 = upper byte of Y + overflow from lower byte addition
+clr //clear overflow
+add $r1 //add the upper byte of x >> i we have y = y + x >> i complete
+mov $r12
+//angle = angle + -(0x8000 >> i)
+clr
+setl 0
+setu 0
+add $r9
+add $r7
+mov $r9
+setl 0
+setu 0
+add $r8
+clr //clear overflow
+add $r6
+mov $r8
+setl 0
+setu 0
+bez CALCULATED
+//jp CALCULATED //finish calculation of else block
+
+YGTEZERO:
+//negateX before shift
+not $r1 
+not $r2 //take complement
+inc $r2 //get two's complement (lower X + 1)
+setl 0  //clear
+setu 0
+add $r1 // add it to the upper X
+clr //clear overflow
+mov $r1 //x temp = -x temp
+//shift X
+setl 0  //clear
+setu 0
+add $r5
+SHIFTX:
+bez STOPSHIFTX
+srpx $r1      //X
+srg $r2
+dec $r0       //decrement r0 by 1
+bnez SHIFTX //if the counter is not zero keep shifting
+STOPSHIFTX:
+//shift Y
+setl 0  //clear
+setu 0
+add $r5
+SHIFTY2:
+bez STOPSHIFTY2
+srpx $r3      //Y
+srg $r4
+dec $r0       //decrement r0 by 1
+bnez SHIFTY2 //if the counter is not zero keep shifting
+STOPSHIFTY2:
+//x = x + y >> i
+setl 0  //clear
+setu 0
+add $r11 //r0 = lower byte of X
+add $r4  //calculate lower byte of x + y >> i (might have carryout)
+mov $r11 //mov back to r11 lower byte(x = x + y >> i)  
+setl 0  //clear
+setu 0
+add $r10 //r0 = upper byte of X + overflow from lower byte addition
+clr //clear overflow
+add $r3 //add the upper byte of -y >> i we have x = x + -y >> i complete
+mov $r10
+//y = y + -x >> i
+clr
+setl 0  //clear
+setu 0
+add $r13 //r0 = lower byte of Y
+add $r2  //calculate lower byte of y + x >> i (might have carryout)
+mov $r13 //mov back to r11 lower byte(y = y + x >> i)  
+setl 0  //clear
+setu 0
+add $r12 //r0 = upper byte of Y + overflow from lower byte addition
+clr //clear overflow
+add $r1 //add the upper byte of x >> i we have y = y + x >> i complete
+mov $r12
+//angle = angle + (0x8000 >> i)
+clr
+setl 0
+setu 0
+add $r9
+add $r7
+mov $r9
+setl 0
+setu 0
+add $r8
+clr //clear overflow
+add $r6
+mov $r8
+
+CALCULATED:
+inc $r5  //increment shift counter
+clr
+setl 0  //clear
+setu 0
+add $r10
+mov $r1
+setl 0  //clear
+setu 0
+add $r11
+mov $r2
+setl 0  //clear
+setu 0
+add $r12
+mov $r3
+setl 0  //clear
+setu 0
+add $r13
+mov $r4
+dec $r14  //decrement global loop index
+setu 0 
+setl 0
+add $r14
+bnez START //if the global counter is zero calculation is done (12 iterations)
+
+//r = x, angle = angle 
+setu 0
+setl 5
+sw $r1
+setl 6
+sw $r2
+setl 7
+sw $r8
+setl 8
+sw $r9
+halt

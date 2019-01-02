@@ -1,0 +1,45 @@
+rm -rf c-bits/*.o tests/output/*.o tests/output/*.s tests/output/*.dSYM tests/output/*.run tests/output/*.log tests/output/*.*result 06-fox.tgz
+stack test
+Tests
+  Fox
+    list-0:    OK (2.68s)
+    list-1:    OK (2.26s)
+    list-full: FAIL (1.96s)
+      Unexpected error
+      expected: "Value 6\n(5, (4, (3, (2, (1, (0, false))))))\n(0, (1, (2, (3, (4, (5, (0, (1, (2, (3, (4, (5, false))))))))))))\n0"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/list-full.fox > tests/output/list-full.s\nnasm -f aout -o tests/output/list-full.o tests/output/list-full.s\nclang -g -m32 -mstackrealign -o tests/output/list-full.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/list-full.o\ntests/output/list-full.run 50 > tests/output/list-full.result\n/bin/bash: line 1: 16370 Segmentation fault      (core dumped) tests/output/list-full.run 50 > tests/output/list-full.result\nmake[1]: *** [tests/output/list-full.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-0:      FAIL (2.17s)
+      Unexpected error
+      expected: "Value (1, 1, 1)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-0.fox > tests/output/gc-0.s\nnasm -f aout -o tests/output/gc-0.o tests/output/gc-0.s\nclang -g -m32 -mstackrealign -o tests/output/gc-0.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-0.o\ntests/output/gc-0.run 8 > tests/output/gc-0.result\n/bin/bash: line 1: 16403 Segmentation fault      (core dumped) tests/output/gc-0.run 8 > tests/output/gc-0.result\nmake[1]: *** [tests/output/gc-0.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-1:      FAIL (2.37s)
+      Unexpected error
+      expected: "Value (16, 26, 36)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-1.fox > tests/output/gc-1.s\nnasm -f aout -o tests/output/gc-1.o tests/output/gc-1.s\nclang -g -m32 -mstackrealign -o tests/output/gc-1.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-1.o\ntests/output/gc-1.run 14 > tests/output/gc-1.result\n/bin/bash: line 1: 16437 Segmentation fault      (core dumped) tests/output/gc-1.run 14 > tests/output/gc-1.result\nmake[1]: *** [tests/output/gc-1.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-2:      FAIL (2.30s)
+      Unexpected error
+      expected: "Value (61, 62, 63)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-2.fox > tests/output/gc-2.s\nnasm -f aout -o tests/output/gc-2.o tests/output/gc-2.s\nclang -g -m32 -mstackrealign -o tests/output/gc-2.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-2.o\ntests/output/gc-2.run 14 > tests/output/gc-2.result\n/bin/bash: line 1: 16475 Segmentation fault      (core dumped) tests/output/gc-2.run 14 > tests/output/gc-2.result\nmake[1]: *** [tests/output/gc-2.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-3:      FAIL (2.10s)
+      Unexpected error
+      expected: "Value (60001, 60002, 60003)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-3.fox > tests/output/gc-3.s\nnasm -f aout -o tests/output/gc-3.o tests/output/gc-3.s\nclang -g -m32 -mstackrealign -o tests/output/gc-3.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-3.o\ntests/output/gc-3.run 14 > tests/output/gc-3.result\n/bin/bash: line 1: 16515 Segmentation fault      (core dumped) tests/output/gc-3.run 14 > tests/output/gc-3.result\nmake[1]: *** [tests/output/gc-3.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-fun-0:  FAIL (2.18s)
+      Unexpected error
+      expected: "Value (60001, 60002, 60003)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-fun-0.fox > tests/output/gc-fun-0.s\nnasm -f aout -o tests/output/gc-fun-0.o tests/output/gc-fun-0.s\nclang -g -m32 -mstackrealign -o tests/output/gc-fun-0.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-fun-0.o\ntests/output/gc-fun-0.run 14 > tests/output/gc-fun-0.result\n/bin/bash: line 1: 16549 Segmentation fault      (core dumped) tests/output/gc-fun-0.run 14 > tests/output/gc-fun-0.result\nmake[1]: *** [tests/output/gc-fun-0.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-fun-1:  FAIL (2.25s)
+      Unexpected error
+      expected: "Value 45"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-fun-1.fox > tests/output/gc-fun-1.s\nnasm -f aout -o tests/output/gc-fun-1.o tests/output/gc-fun-1.s\nclang -g -m32 -mstackrealign -o tests/output/gc-fun-1.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-fun-1.o\ntests/output/gc-fun-1.run 22 > tests/output/gc-fun-1.result\n/bin/bash: line 1: 16592 Segmentation fault      (core dumped) tests/output/gc-fun-1.run 22 > tests/output/gc-fun-1.result\nmake[1]: *** [tests/output/gc-fun-1.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-copy-0: FAIL (2.22s)
+      Unexpected error
+      expected: "Value (60001, 60002, 60003)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-copy-0.fox > tests/output/gc-copy-0.s\nnasm -f aout -o tests/output/gc-copy-0.o tests/output/gc-copy-0.s\nclang -g -m32 -mstackrealign -o tests/output/gc-copy-0.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-copy-0.o\ntests/output/gc-copy-0.run 14 > tests/output/gc-copy-0.result\n/bin/bash: line 1: 16631 Segmentation fault      (core dumped) tests/output/gc-copy-0.run 14 > tests/output/gc-copy-0.result\nmake[1]: *** [tests/output/gc-copy-0.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+    gc-copy-1: FAIL (2.53s)
+      Unexpected error
+      expected: "Value (60001, 60002, 60003)"
+       but got: "Error make[1]: Entering directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\nstack exec -- fox tests/input/gc-copy-1.fox > tests/output/gc-copy-1.s\nnasm -f aout -o tests/output/gc-copy-1.o tests/output/gc-copy-1.s\nclang -g -m32 -mstackrealign -o tests/output/gc-copy-1.run c-bits/gc.o c-bits/types.o c-bits/main.c tests/output/gc-copy-1.o\ntests/output/gc-copy-1.run 14 > tests/output/gc-copy-1.result\n/bin/bash: line 1: 16670 Segmentation fault      (core dumped) tests/output/gc-copy-1.run 14 > tests/output/gc-copy-1.result\nmake[1]: *** [tests/output/gc-copy-1.result] Error 139\nmake[1]: Leaving directory `/home/linux/ieng6/oce/42/ziy086/cse131/06-fox'\n"
+
+9 out of 11 tests failed (25.18s)
+OVERALL SCORE = 2 / 11

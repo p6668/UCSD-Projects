@@ -1,0 +1,9 @@
+.stack-work
+
+*.o
+*.s
+*.log
+*.run
+*.result
+
+*~

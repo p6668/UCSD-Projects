@@ -1,0 +1,51 @@
+[
+  {
+    "name": "test1",
+    "code": "(0 + 1073741824)",
+    "result": {
+      "failure": "too large"
+    }
+  },
+  {
+    "name": "test2",
+    "code": "(0-536870911-1) * 2",
+    "result": {
+      "value": "-1073741824"
+    }
+  },
+  {
+    "name"   : "test3",
+    "code"   : "
+def add2(x, x, x):
+  y+y
+
+def add2(x):
+  let x = 1073741824 in
+    x + 1
+
+add(12)
+",
+    "result" : { 
+      "failure": "duplicate parameter" , 
+      "failure": "unbounded" , 
+      "failure": "arity" , 
+      "failure": "duplicate function" , 
+      "failure": "too large" , 
+      "failure": "not defined" 
+    }
+  },
+   {
+    "name"   : "test4",
+    "code"   : "(10, 20, 30, 40, 50)[0 - 1]",
+    "result" : { 
+      "failure": "index too small" 
+    }
+  },
+  {
+    "name"   : "test5",
+    "code"   : "(10, 20, 30, 40, 99)[3 + 2]",
+    "result" : { 
+      "failure": "index too large" 
+    }
+  }
+]

@@ -1,0 +1,142 @@
+// constant 8
+setu    0
+setl    8
+mov     r7
+
+
+// load the MSW @ mem addr 128 for the dividend and store in r2
+setu    8
+setl    0
+lw      r2
+
+
+// load shift count with value of 16
+setu    1
+mov     r6
+
+
+// load the divisor @ mem addr 130, store in r3
+setu    8
+setl    2
+lw      r3
+
+
+// set shits to 0
+setu    0
+setl    0
+mov     r1  // upper dividand
+mov     r4  // upper quotient
+mov     r5  // lower quotient
+
+
+// while r1 less than divisor(r3), keep shifting the lower dividend to r1
+SHIFTLT:
+slp     r2
+slg     r1
+dec     r6
+
+// check if shiftcount is 8, if so, load the lower 8 bits of the dividend
+setu    0
+setl    0
+add     r6
+sub     r7
+bnez    SKIPLOAD
+
+// if upper byte read, load the lower byte
+setu    8
+setl    1
+lw      r2
+
+setu    0
+setl    0
+add     r1
+bnez    SKIPLOAD
+
+setu    0
+setl    0
+add     r2
+slt     r3
+bnez    END
+SKIPLOAD:
+
+// if current shifted amount is less than divisor, repeat
+setu    0
+setl    0
+add     r1
+slt     r3
+bnez    SHIFTLT
+
+// Divide logic starts here
+DIVIDE:
+// load upper dividend to r0
+setu    0
+setl    0
+add     r1
+
+// if(r1 < r3)
+slt     r3
+bnez    DIVLT
+
+// dividend is greater than divisor, r1 = r1 - r3
+setu    0
+setl    0
+add     r1
+
+sub     r3
+mov     r1
+inc     r5 
+// dividend is less than divisor shift left
+DIVLT:
+slp     r5
+slg     r4
+
+
+// if shifted 8 times, load lower dividend at mem address 129
+setu    0
+setl    0
+add     r6
+sub     r7
+bnez    DONTLOAD
+setu    8
+setl    1
+lw      r2
+DONTLOAD:
+
+
+// shift dividend
+slp     r2
+slg     r1
+dec     r6
+
+
+// repeat divide if we havent seen the entire dividend
+setu    0
+setl    0
+add     r6
+bnez    DIVIDE
+// end of divide logic
+
+END:
+
+// load upper dividend to r0
+setu    0
+setl    0
+add     r3
+
+// if(r3 < r1)
+slt     r1
+add     r5
+mov     r5
+
+// load upper quotient to mem address 126
+setu    7
+setl    14
+sw      r4
+// load lower quotient to mem address 127
+setu    7
+setl    15
+sw      r5
+
+// send halt signal
+clr
+halt
